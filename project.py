@@ -2,16 +2,13 @@ from xml.dom import minidom
 import os
 import openpyxl
 
-
 def main():
     total = load_xml()
-    #print(total)
 
     if len(itens := check_duplicate(total["MAVIFER"], total["IZAMAC"])) > 0:
         for item in itens:
             while (True):
-                empresa = input(
-                    f"{item} é de qual empresa (mavifer ou izamac)? ").upper()
+                empresa = input(f"{item} é de qual empresa (mavifer ou izamac)? ").upper()
                 if empresa in ["MAVIFER", "IZAMAC"]:
                     if empresa == "MAVIFER":
                         value = total["IZAMAC"].pop(item)
@@ -21,57 +18,12 @@ def main():
                         total[empresa][item] += value
                     break
 
-    janelas = {
-        1: 'B',
-        2: 'C',
-        3: 'D',
-        4: 'E',
-        5: 'F',
-        6: 'G',
-        7: 'H',
-        8: 'I',
-        9: 'J',
-        10: 'K'
-    }
-
-    while True:
-        num_janela = int(input("Qual janela da carga?(1 .. 10) "))
-        if num_janela in janelas:
-            break
-
-    path = "/workspaces/16007027/project/excel/Apontamento Expedição.xlsx"
-    wb = openpyxl.load_workbook(path)
-
-    # range header B4:K4
-    # range items A6:A35
-    # range qtd B6:K35
-    # col = B:K
-    # row = 6:35
-
-    for emp_name in ["MAVIFER", "IZAMAC"]:
-        ws = wb[emp_name]
+    apontamento_expedicao(total)
 
 
-        items = get_items_excel(ws)
-
-        #print(emp_name)
-        print(items)
-        #print(total[emp_name])
-        for item in total[emp_name].keys():
-            items = get_items_excel(ws)
-            if item in items.keys():
-                cell_coord = f"{janelas[num_janela]}{items[item]}"
-                ws[cell_coord] = total[emp_name][item]
-            else:
-                row = get_first_empty(items)
-                cell_coord = cell_coord = f"{janelas[num_janela]}{row}"
-                ws[f"A{row}"] = item
-                ws[cell_coord] = total[emp_name][item]
-
-    wb.save("teste.xlsx")
-
+# le os arquivos xml e retorna um dicionario com os itens e quantidades desses xml
 def load_xml() -> dict:
-    xml_path = "/workspaces/16007027/project/xml/"
+    xml_path = "C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\xml\\"
     total = {"MAVIFER": {}, "IZAMAC": {}}
     for file_name in os.listdir(xml_path):
         nfe = minidom.parse(xml_path + file_name)
@@ -90,7 +42,7 @@ def load_xml() -> dict:
                 total[empresa][cod_prod] = float(qtd_prod)
     return total
 
-# recive two dictionaries and check if they have duplicate keys between the two of then
+# recebe dois dicionarios e verifica se há algum item duplicado e retorna uma lista com os itens duplicados
 def check_duplicate(mavifer: dict, izamac: dict) -> list:
     duplicate = []
     for key in mavifer.keys():
@@ -99,6 +51,7 @@ def check_duplicate(mavifer: dict, izamac: dict) -> list:
 
     return duplicate
 
+# recebe uma tabela e retorna uma lista com os itens já estão na planilha
 def get_items_excel(ws: openpyxl.worksheet.worksheet.Worksheet) -> dict:
     items = {}
     for cell in ws['A6':'A35']:
@@ -106,12 +59,63 @@ def get_items_excel(ws: openpyxl.worksheet.worksheet.Worksheet) -> dict:
             items[cell[0].value.upper()] = cell[0].row
     return items
 
+# Retorna um inteiro indicando qual a proxima linha da tabela que esta vazia
 def get_first_empty(items: dict) -> int:
-    row = 0
+    row = 5
     for item in items.keys():
         if items[item] > row:
             row = items[item]
     return row+1
 
+#recebe um dicionario com os itens das duas empresas e salva na planilha
+def apontamento_expedicao(total: dict):
+    janelas = {
+        1: 'B',
+        2: 'C',
+        3: 'D',
+        4: 'E',
+        5: 'F',
+        6: 'G',
+        7: 'H',
+        8: 'I',
+        9: 'J',
+        10: 'K'
+    }
+
+    while True:
+        num_janela = int(input("Qual janela da carga?(1 .. 10) ")) + 1
+        if num_janela in janelas:
+            break
+
+    path = "C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\excel\\Apontamento Expedição.xlsx"
+    wb = openpyxl.load_workbook(path)
+
+    # range header B4:K4
+    # range items A6:A35
+    # range qtd B6:K35
+    # col = B:K
+    # row = 6:35
+
+    for emp_name in ["MAVIFER", "IZAMAC"]:
+        ws = wb[emp_name]
+
+        for item in total[emp_name].keys():
+            items = get_items_excel(ws)
+            if item in items.keys():
+                cell_coord = f"{janelas[num_janela]}{items[item]}"
+                ws[cell_coord] = total[emp_name][item]
+            else:
+                row = get_first_empty(items)
+                cell_coord = f"{janelas[num_janela]}{row}"
+                ws[f"A{row}"] = item
+                ws[cell_coord] = total[emp_name][item]
+
+    wb.save("C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\excel\\Apontamento Expedição.xlsx")
+
+def faturamento():
+    pass
+
+def romaneio(itens: dict):
+    pass
 if __name__ == "__main__":
     main()
