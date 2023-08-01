@@ -4,6 +4,7 @@ import openpyxl
 
 numero_nfs = {"MAVIFER": [], "IZAMAC": []}
 
+
 def main():
     total = load_xml()
 
@@ -11,7 +12,7 @@ def main():
         for item in itens:
             while True:
                 empresa = input(f"{item} é de qual empresa (mavifer ou izamac)? ").upper()
-                if empresa in ["MAVIFER", "IZAMAC", "M", "I", "MAV", "IZA"]:
+                if empresa in ["MAVIFER", "IZAMAC"]:
                     if empresa == "MAVIFER":
                         value = total["IZAMAC"].pop(item)
                         total[empresa][item] += value
@@ -168,7 +169,7 @@ def romaneio(itens: dict):
 
     while True:
         tipo_romaneio = input("Refugo ou Jato? ").upper()
-        if tipo_romaneio in ["REFUGO", "JATO", "R", "J"]:
+        if tipo_romaneio in ["REFUGO", "JATO"]:
             break
 
     ws = wb[tipo_romaneio]
