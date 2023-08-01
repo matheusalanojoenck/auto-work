@@ -11,7 +11,7 @@ def main():
         for item in itens:
             while True:
                 empresa = input(f"{item} é de qual empresa (mavifer ou izamac)? ").upper()
-                if empresa in ["MAVIFER", "IZAMAC"]:
+                if empresa in ["MAVIFER", "IZAMAC", "M", "I", "MAV", "IZA"]:
                     if empresa == "MAVIFER":
                         value = total["IZAMAC"].pop(item)
                         total[empresa][item] += value
@@ -109,7 +109,7 @@ def apontamento_expedicao(total: dict):
         if num_janela in janelas:
             break
 
-    path = "C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\excel\\Apontamento Expedição.xlsx"
+    path = "\\\\10.1.1.7\\Documents\\PRIORIDADES\\Apontamento Expedição.xlsx"
     wb = openpyxl.load_workbook(path)
 
     # range header B4:K4
@@ -132,7 +132,7 @@ def apontamento_expedicao(total: dict):
                 ws[f"A{row}"] = item
                 ws[cell_coord] = total[emp_name][item]
 
-    wb.save("C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\excel\\Apontamento Expedição.xlsx")
+    wb.save("\\\\10.1.1.7\\Documents\\PRIORIDADES\\Apontamento Expedição.xlsx")
 
 
 def faturamento():
@@ -163,12 +163,12 @@ def faturamento():
 
 
 def romaneio(itens: dict):
-    path = "C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\excel\\Refugo e Jato.xlsx"
+    path = "\\\\MARCELO2018\\Documents\\Faturamento\\Refugo e Jato.xlsx"
     wb = openpyxl.load_workbook(path)
 
     while True:
         tipo_romaneio = input("Refugo ou Jato? ").upper()
-        if tipo_romaneio in ["REFUGO", "JATO"]:
+        if tipo_romaneio in ["REFUGO", "JATO", "R", "J"]:
             break
 
     ws = wb[tipo_romaneio]
@@ -191,7 +191,7 @@ def romaneio(itens: dict):
         ws[f"E{row}"] = itens["IZAMAC"][item]
         row += 1
 
-    wb.save("C:\\Users\\Nota Fiscal\\Documents\\GitHub\\auto-work\\excel\\Refugo e Jato - .xlsx")
+    wb.save("\\\\MARCELO2018\\Documents\\Faturamento\\Refugo e Jato.xlsx")
 
 
 if __name__ == "__main__":
