@@ -1,6 +1,7 @@
 from xml.dom import minidom
 import os
 import openpyxl
+import win32clipboard
 
 numero_nfs = {"MAVIFER": [], "IZAMAC": []}
 
@@ -27,8 +28,9 @@ def main():
         print("2. Romaneio")
         print("0. Sair")
         opcao = int(input())
-        if opcao in [1, 2]:
+        if opcao in [1, 2, 0]:
             break
+
     match opcao:
         case 1:
             apontamento_expedicao(total)
@@ -141,11 +143,13 @@ def faturamento():
 
     cfop_map = {
         "5916": "Conserto",
-        "5902": "R. Industrialização",
+        "5902": "R. Industrializaçao",
         "5124": "Valor\t\tPeso",
         "5921": "Embalagem\tColar Schulz",
         "5949": "Simples Remessa\tResiduo de Ferro"
     }
+
+    final_text = ""
 
     for file_name in os.listdir(xml_path):
         nfe = minidom.parse(xml_path + file_name)
@@ -158,10 +162,17 @@ def faturamento():
             valor = nfe.getElementsByTagName("vLiq")[0].childNodes[0].nodeValue
             peso = str(round(float(nfe.getElementsByTagName("pesoL")[0].childNodes[0].nodeValue) / 1000, 1))
             cfop_map[cfop] = f"{valor.replace('.', ',')}\t\t{peso.replace('.', ',')}"
-            print(f"{nnf}\t{cfop_map[cfop]}")
+            final_text += f"{nnf}\t{cfop_map[cfop]}\n"
+            # print(f"{nnf}\t{cfop_map[cfop]}")
         else:
-            print(f"{nnf}\t{cfop_map[cfop]}")
+            final_text += f"{nnf}\t{cfop_map[cfop]}\n"
+            # print(f"{nnf}\t{cfop_map[cfop]}")
 
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
+    win32clipboard.SetClipboardText(final_text)
+    win32clipboard.CloseClipboard()
+    print(final_text)
 
 def romaneio(itens: dict):
     path = "\\\\MARCELO2018\\Documents\\Faturamento\\Refugo e Jato.xlsx"
