@@ -184,8 +184,24 @@ def romaneio(itens: dict):
             break
 
     ws = wb[tipo_romaneio]
+
+    # Limpa a planilha antes de preencher
+    ws["B2"] = ""
+    ws["B3"] = ""
+    for i in range(7, 33):
+        ws[f"A{i}"] = ""
+        ws[f"B{i}"] = ""
+        ws[f"D{i}"] = ""
+        ws[f"E{i}"] = ""
     ws["B2"] = " / ".join(numero_nfs["MAVIFER"])
     ws["B3"] = " / ".join(numero_nfs["IZAMAC"])
+
+    # Limpa a planilha antes de preencher
+    for i in range(7, 33):
+        ws[f"A{i}"] = ""
+        ws[f"B{i}"] = ""
+        ws[f"D{i}"] = ""
+        ws[f"E{i}"] = ""
 
     # itens A7 .. A32
     # quantidade B7 .. B32
