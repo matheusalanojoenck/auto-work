@@ -143,7 +143,7 @@ def faturamento():
 
     cfop_map = {
         "5916": "Conserto",
-        "5902": "R. Industrializaçao",
+        "5902": "R. Industrialização",
         "5124": "Valor\t\tPeso",
         "5921": "Embalagem\tColar Schulz",
         "5949": "Simples Remessa\tResiduo de Ferro"
