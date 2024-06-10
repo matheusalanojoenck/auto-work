@@ -162,10 +162,12 @@ def faturamento():
             valor = nfe.getElementsByTagName("vLiq")[0].childNodes[0].nodeValue
             peso = str(round(float(nfe.getElementsByTagName("pesoL")[0].childNodes[0].nodeValue) / 1000, 1))
             cfop_map[cfop] = f"{valor.replace('.', ',')}\t\t{peso.replace('.', ',')}"
-            final_text += f"{nnf}\t{cfop_map[cfop]}\n"
+            # final_text += f"{nnf}\t{cfop_map[cfop]}\n"
+            final_text += f"{cfop_map[cfop]}\n"
             # print(f"{nnf}\t{cfop_map[cfop]}")
         else:
-            final_text += f"{nnf}\t{cfop_map[cfop]}\n"
+            # final_text += f"{nnf}\t{cfop_map[cfop]}\n"
+            final_text += f"{cfop_map[cfop]}\n"
             # print(f"{nnf}\t{cfop_map[cfop]}")
 
     win32clipboard.OpenClipboard()
