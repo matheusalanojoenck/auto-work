@@ -24,7 +24,7 @@ def main():
 
     # lendo itens recebidos
     for i in range(len(recebidos)):
-        with open(f"{paths}{recebidos[i]}") as csvfile:
+        with (open(f"{paths}{recebidos[i]}") as csvfile):
             for _ in range(3):
                 csvfile.__next__()
             reader = list(csv.DictReader(csvfile, delimiter=';'))[:-4]
